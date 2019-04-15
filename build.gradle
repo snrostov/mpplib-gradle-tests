@@ -1,0 +1,100 @@
+plugins {
+    id 'kotlin-multiplatform' version '1.3-SNAPSHOT'
+}
+repositories {
+    mavenLocal()
+//    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    mavenCentral()
+}
+group 'com.example'
+version '0.0.1'
+
+apply plugin: 'maven-publish'
+
+kotlin {
+    jvm()
+    js()
+    // For ARM, should be changed to iosArm32 or iosArm64
+    // For Linux, should be changed to e.g. linuxX64
+    // For MacOS, should be changed to e.g. macosX64
+    // For Windows, should be changed to e.g. mingwX64
+    macosX64("macos")
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation kotlin('stdlib-common')
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation kotlin('test-common')
+                implementation kotlin('test-annotations-common')
+            }
+        }
+        jvmMain {
+            dependencies {
+                implementation kotlin('stdlib-jdk8')
+            }
+        }
+        jvmTest {
+            dependencies {
+                implementation kotlin('test')
+                implementation kotlin('test-junit')
+            }
+        }
+        jsMain {
+            dependencies {
+                implementation kotlin('stdlib-js')
+//                implementation npm('react', '16.8.6')
+            }
+        }
+        jsTest {
+            dependencies {
+                implementation kotlin('test-js')
+//                implementation npm('mocha', '6.1.2')
+//                implementation npm('karma', '4.0.1')
+            }
+        }
+        macosMain {
+        }
+        macosTest {
+        }
+    }
+}
+
+tasks.findByName("jvmTest").configure {
+    ignoreFailures = true
+}
+
+tasks.findByName("jsTest").configure {
+    useKarma {
+
+    }
+
+//    useMocha {
+//
+//    }
+
+//    ignoreFailures = true
+//    testsGrouping = org.jetbrains.kotlin.gradle.testing.TestsGrouping.leaf
+
+//    testLogging {
+//        exceptionFormat = "FULL"
+//    }
+}
+
+tasks.findByName("macosTest").configure {
+//    ignoreFailures = true
+//    testsGrouping = org.jetbrains.kotlin.gradle.testing.TestsGrouping.leaf
+
+//    testLogging {
+//        exceptionFormat = "FULL"
+//    }
+}
+
+//task testReport(type: TestReport) {
+//    dependsOn("jsTest", "macosTest", "jvmTest")
+//
+//    destinationDir = file("$buildDir/reports/allTests")
+//    reportOn(tasks.findByName("jsTest"), tasks.findByName("macosTest"), tasks.findByName("jvmTest"))
+//}
